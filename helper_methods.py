@@ -1,25 +1,7 @@
-import torch
-import numpy as np
-#device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-#print(f"Używane urządzenie: {device}")
 from skimage.morphology import remove_small_objects
-# PyTorch
 import torch
-from torch import nn
-from torch.nn import functional as F
-from torch.utils.data import DataLoader, random_split
-import torchvision
-
-# PyTorch Lightning
-import pytorch_lightning as pl
-#from pytorch_lightning.metrics.functional import accuracy
-
 import cv2
-import numpy as np
-from skimage import feature
-import matplotlib.pyplot as plt
-def powitaj():
-    print("Cześć z helper_methods.py!")
+
 def get_mask(image, itr=0):
     image = image.copy()
     blur = cv2.GaussianBlur(image, (5, 5), 0)
@@ -124,26 +106,6 @@ import matplotlib.pyplot as plt
 
 
 def plot_images(images, columns, rows, figsize=(20, 15), labels=None):
-    # fig = plt.figure(figsize=figsize)
-    # import os
-    # dataset_path = "/home/przemekk/PycharmProjects/pl_sudoku/Sudoku-Solver/datasets"
-    # dataset = sorted([d for d in os.listdir(dataset_path) if os.path.isdir(os.path.join(dataset_path, d))])
-    # ax = []
-    #
-    # for i in range(columns * rows):
-    #     ax.append(fig.add_subplot(rows, columns, i + 1))
-    #
-    #     img = images[i]
-    #
-    #     if labels is not None:
-    #         label = labels[i]
-    #         if isinstance(label, torch.Tensor):
-    #             label = dataset.classes[label.item()]
-    #         ax[-1].set_title(label)
-    #
-    #     plt.imshow(img, cmap='gray')
-    #
-    # plt.show()  # finally, render the plot
     fig = plt.figure(figsize=figsize)
     ax = []
 

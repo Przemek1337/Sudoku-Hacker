@@ -1,23 +1,12 @@
-import torch
-import numpy as np
-#device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-#print(f"Używane urządzenie: {device}")
 from torchmetrics.functional import accuracy
-# PyTorch
 import torch
 from torch import nn
 from torch.nn import functional as F
 from torch.utils.data import DataLoader, random_split
 import torchvision
 from PIL import Image
-# PyTorch Lightning
 import pytorch_lightning as pl
-#from pytorch_lightning.metrics.functional import accuracy
-
-import cv2
-import numpy as np
-from skimage import feature
-import matplotlib.pyplot as plt
+import os
 
 torch.manual_seed(0)
 
@@ -33,7 +22,9 @@ val_tfms = torchvision.transforms.Compose([
   torchvision.transforms.Normalize((0.1307,), (0.3081,))
 ])
 
-dataset = torchvision.datasets.ImageFolder("/home/przemekk/PycharmProjects/pl_sudoku/Sudoku-Solver/datasets", loader=Image.open, transform=tfms)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATASET_DIR = os.path.join(BASE_DIR, "datasets")
+dataset = torchvision.datasets.ImageFolder(DATASET_DIR, loader=Image.open, transform=tfms)
 
 print(f"Total length of dataset: {len(dataset)}")
 train_size = int(len(dataset) * 0.9)
