@@ -3,7 +3,6 @@ from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
 import cv2
 
-
 class SudokuSolverApp:
     def __init__(self, root):
         self.root = root
