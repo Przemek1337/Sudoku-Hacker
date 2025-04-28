@@ -39,7 +39,6 @@ class HomeFrame(tk.Frame):
         button_frame = tk.Frame(button_container, bg=self.controller.background_color)
         button_frame.pack(expand=True)
 
-        # Button style
         button_style = {
             "font": ("Helvetica", 14),
             "width": 18,
