@@ -1,5 +1,4 @@
-import numpy as np
-
+#(TODO) future improvement - different nn model to solve this instead of basic algorithm
 class SudokuSolver:
     def __init__(self):
         pass

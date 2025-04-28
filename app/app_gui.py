@@ -1,11 +1,11 @@
-import tkinter as tk
 from tkinter import filedialog, messagebox
-from PIL import Image, ImageTk
 import cv2
 import threading
 from frame_home import HomeFrame
 from frame_sudoku import SudokuFrame
 from frame_result import ResultFrame
+from dialog_instructions import show_instructions_dialog
+from dialog_about import show_about_dialog
 
 class SudokuSolverApp:
     def __init__(self, root, model_handler, solver):
@@ -113,7 +113,6 @@ class SudokuSolverApp:
         threading.Thread(target=process_thread).start()
 
     def show_results(self):
-
         self.result_frame.update_results(self.detected_grid, self.solution_grid)
 
         self.show_result()
@@ -121,9 +120,7 @@ class SudokuSolverApp:
         self.sudoku_frame.set_processing_status(False)
 
     def show_instructions(self):
-        from gui.dialogs.instructions_dialog import show_instructions_dialog
         show_instructions_dialog(self.root, self)
 
     def show_about(self):
-        from gui.dialogs.about_dialog import show_about_dialog
         show_about_dialog(self.root, self)
