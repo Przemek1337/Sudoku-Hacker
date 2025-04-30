@@ -1,1 +1,1 @@
-w budowie
+pip install -r reqirements.txt
