@@ -96,7 +96,7 @@ class OurSmallModel(pl.LightningModule):
 
     # W tej fukcji definiujemy sobie optimizer
     def configure_optimizers(self):
-      optimizer = torch.optim.Adam(model.parameters(), lr=self.learning_rate)
+      optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
       return optimizer
 
     # W tej funkcji definiujemy dataloader do treningu

@@ -91,7 +91,7 @@ class SudokuSolverApp:
             return
 
         self.sudoku_frame.set_processing_status(True)
-        messagebox.showinfo("Rozwiązywanie", "Rozpoczęto analizę obrazu i rozwiązywanie Sudoku...")
+        messagebox.showinfo("Rozwiązywanie", "Rozpoczęto analizę obrazu i rozwiązywanie Sudoku, kliknij 'ok'")
 
         def process_thread():
             try:

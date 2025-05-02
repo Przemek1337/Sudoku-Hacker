@@ -65,4 +65,4 @@ def process_sudoku_image(image_path, model, tfms):
     #     plt.axis('off')
     # plt.tight_layout()
     # plt.show()
-    return 0
+    return predictions

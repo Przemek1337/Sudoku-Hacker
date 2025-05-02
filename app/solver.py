@@ -4,7 +4,7 @@ class SudokuSolver:
         pass
 
     def solve(self, grid):
-        solution = grid.copy()
+        solution = grid
 
         for i in range(9):
             for j in range(9):
