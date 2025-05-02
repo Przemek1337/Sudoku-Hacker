@@ -1,6 +1,8 @@
 from skimage.morphology import remove_small_objects
 import torch
 import cv2
+import numpy as np
+import matplotlib.pyplot as plt
 
 def get_mask(image, itr=0):
     image = image.copy()
@@ -99,11 +101,6 @@ def put_intersection_dots(image, squares):
     for square in squares:
         for pt in square:
             cv2.circle(image, (pt[0], pt[1]), 8, (255), -1)
-
-
-import numpy as np
-import matplotlib.pyplot as plt
-
 
 def plot_images(images, columns, rows, figsize=(20, 15), labels=None):
     fig = plt.figure(figsize=figsize)

@@ -1,9 +1,6 @@
-import torchvision
-
 from helper_methods import get_best_mask, get_corners, get_squares, correct_squares, plot_images
 import os
 from PIL import Image
-# PyTorch
 import torch
 import cv2
 import numpy as np

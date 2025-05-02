@@ -1,6 +1,7 @@
 torch>=2.0
 torchvision
 pytorch-lightning>=2.0
+matplotlib==3.8.2
 torchmetrics
 numpy
 opencv-python

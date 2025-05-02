@@ -33,7 +33,6 @@ valid_size = len(dataset) - train_size
 dataset_train, dataset_val = random_split(dataset, [train_size, valid_size])
 print(f"Total length of train dataset: {len(dataset_train)}")
 print(f"Total length of valid dataset: {len(dataset_val)}")
-
 class OurSmallModel(pl.LightningModule):
 
     def __init__(self, learning_rate=0.0003):
