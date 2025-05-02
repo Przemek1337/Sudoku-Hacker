@@ -10,7 +10,7 @@ from dialog_about import show_about_dialog
 class SudokuSolverApp:
     def __init__(self, root, model_handler, solver):
         self.root = root
-        self.root.title("AI Sudoku Solver")
+        self.root.title("AI Sudoku Hacker")
         self.root.geometry("800x700")
 
         self.model_handler = model_handler
