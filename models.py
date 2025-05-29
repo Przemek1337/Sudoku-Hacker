@@ -82,15 +82,16 @@ class OurSmallModel(pl.LightningModule):
       prediction = self(x)
 
       # obliczenie lossa
-      loss = F.mse_loss(prediction, F.one_hot(y, num_classes=10).float())
-
+      #loss = F.mse_loss(prediction, F.one_hot(y, num_classes=10).float())
+      loss = F.nll_loss(prediction, y)
+      acc = accuracy(prediction, y, task='multiclass', num_classes=10)
       predicted_number = torch.argmax(prediction, dim=1)
       # policzenie "celności" modelu
       prediction_accuracy = accuracy(prediction, y, task="multiclass", num_classes=10)
 
       # wypisanie naszych statystyk walidacyjnych
       self.log('val_loss', loss, prog_bar=True)
-      self.log('val_acc', prediction_accuracy, prog_bar=True)
+      self.log('val_acc', acc, prog_bar=True)
 
       return loss
 
