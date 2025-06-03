@@ -5,7 +5,7 @@ import torch
 import cv2
 import numpy as np
 class DummyDataset:
-    classes = [str(i) for i in range(1, 10)]
+    classes = [str(i) for i in range(1, 9)]
 
 dataset = DummyDataset()
 def process_sudoku_image(image_path, model, tfms):
