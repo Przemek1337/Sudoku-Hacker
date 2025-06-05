@@ -5,7 +5,7 @@ import torch
 import cv2
 import numpy as np
 class DummyDataset:
-    classes = [str(i) for i in range(1, 9)]
+    classes = [str(i) for i in range(1,9)]
 
 dataset = DummyDataset()
 def process_sudoku_image(image_path, model, tfms):
@@ -41,7 +41,12 @@ def process_sudoku_image(image_path, model, tfms):
             x = number.unsqueeze(0)
 
             prediction = model(x)
-            label = int(dataset.classes[torch.argmax(prediction, dim=1).item()])
+
+            pred_index = torch.argmax(prediction, dim=1).item()
+            if pred_index >= len(dataset.classes):
+                print(f"[ERROR] Predicted index {pred_index} out of range for class list!")
+                continue
+            label = int(dataset.classes[pred_index])
 
             images.append(x[0][0].squeeze())
             labels.append(str(label))

@@ -188,3 +188,130 @@ class OurSmallModel(pl.LightningModule):
         print(f"Najlepsza accuracy: {best_acc:.4f}")
         print(f"Końcowy loss: {final_loss:.4f}")
         print(f"Liczba epok: {len(self.val_accuracies)}")
+
+
+class OurBigModel(pl.LightningModule):
+
+  def __init__(self, learning_rate=0.0003, model_name="ModelCNN"):
+    super().__init__()
+    self.learning_rate = learning_rate
+    self.model_name = model_name
+
+    self.train_losses = []
+    self.val_losses = []
+    self.train_accuracies = []
+    self.val_accuracies = []
+
+    self.conv_block = nn.Sequential(
+      nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1),
+      nn.BatchNorm2d(32),
+      nn.ReLU(inplace=True),
+      nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
+      nn.BatchNorm2d(64),
+      nn.ReLU(inplace=True),
+      nn.MaxPool2d(kernel_size=2, stride=2),
+      nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+      nn.BatchNorm2d(128),
+      nn.ReLU(inplace=True),
+      nn.MaxPool2d(kernel_size=2, stride=2)
+    )
+
+    self.linear_block = nn.Sequential(
+      nn.Dropout(p=0.5),
+      nn.Linear(128 * 7 * 7, 128),
+      nn.BatchNorm1d(128),
+      nn.ReLU(inplace=True),
+      nn.Dropout(0.5),
+      nn.Linear(128, 64),
+      nn.BatchNorm1d(64),
+      nn.ReLU(inplace=True),
+      nn.Dropout(0.5),
+      nn.Linear(64, 10)
+    )
+
+  def forward(self, x):
+    x = self.conv_block(x)
+    x = x.view(x.size(0), -1)
+    x = self.linear_block(x)
+    return F.log_softmax(x, dim=1)
+
+  def training_step(self, batch, batch_idx):
+    x, y = batch
+    prediction = self(x)
+    loss = F.nll_loss(prediction, y)
+    acc = accuracy(prediction, y, task='multiclass', num_classes=10)
+    self.log('train_loss', loss, prog_bar=True)
+    self.log('train_acc', acc, prog_bar=True)
+    return loss
+
+  def validation_step(self, batch, batch_idx):
+    x, y = batch
+    prediction = self(x)
+    loss = F.nll_loss(prediction, y)
+    acc = accuracy(prediction, y, task='multiclass', num_classes=10)
+    self.log('val_loss', loss, on_step=False, on_epoch=True, prog_bar=True)
+    self.log('val_acc', acc, on_step=False, on_epoch=True, prog_bar=True)
+    return loss
+
+  def on_train_epoch_end(self):
+    if 'train_loss' in self.trainer.logged_metrics:
+      self.train_losses.append(self.trainer.logged_metrics['train_loss'].item())
+    if 'train_acc' in self.trainer.logged_metrics:
+      self.train_accuracies.append(self.trainer.logged_metrics['train_acc'].item())
+
+  def on_validation_epoch_end(self):
+    if 'val_loss' in self.trainer.logged_metrics:
+      self.val_losses.append(self.trainer.logged_metrics['val_loss'].item())
+    if 'val_acc' in self.trainer.logged_metrics:
+      self.val_accuracies.append(self.trainer.logged_metrics['val_acc'].item())
+
+  def configure_optimizers(self):
+    return torch.optim.Adam(self.parameters(), lr=self.learning_rate)
+
+  def train_dataloader(self):
+    return DataLoader(dataset_train, batch_size=16, num_workers=8)
+
+  def val_dataloader(self):
+    return DataLoader(dataset_val, batch_size=16, num_workers=8)
+
+  def plot_metrics(self, save_path=None):
+    if not self.val_losses or not self.val_accuracies:
+      print("Brak metryk do wyplotowania. Czy model był trenowany?")
+      return
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
+    epochs = range(1, len(self.val_losses) + 1)
+
+    if self.train_losses and len(self.train_losses) == len(self.val_losses):
+      ax1.plot(epochs, self.train_losses, 'b-', label='Training Loss', linewidth=2)
+    ax1.plot(epochs, self.val_losses, 'r-', label='Validation Loss', linewidth=2)
+    ax1.set_title(f'{self.model_name} - Loss')
+    ax1.set_xlabel('Epoka')
+    ax1.set_ylabel('Loss')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+
+    ax2.plot(epochs, self.val_accuracies, 'g-', label='Validation Accuracy', linewidth=2)
+    ax2.set_title(f'{self.model_name} - Accuracy')
+    ax2.set_xlabel('Epoka')
+    ax2.set_ylabel('Accuracy')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+    ax2.set_ylim(0, 1)
+
+    plt.tight_layout()
+    if save_path:
+      plt.savefig(save_path, dpi=300, bbox_inches='tight')
+      print(f"Wykres zapisany do: {save_path}")
+    plt.show()
+
+    if self.val_accuracies and self.val_losses:
+      final_acc = self.val_accuracies[-1]
+      best_acc = max(self.val_accuracies)
+      final_loss = self.val_losses[-1]
+
+      print(f"\n=== STATYSTYKI {self.model_name} ===")
+      print(f"Końcowa accuracy: {final_acc:.4f}")
+      print(f"Najlepsza accuracy: {best_acc:.4f}")
+      print(f"Końcowy loss: {final_loss:.4f}")
+      print(f"Liczba epok: {len(self.val_accuracies)}")
