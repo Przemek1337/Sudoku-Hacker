@@ -84,9 +84,9 @@ class OurSmallModel(pl.LightningModule):
       self.val_accuracies = []
       self.train_accuracies = []
 
-      self.layer1 = nn.Linear(28*28, 256)
-      self.layer2 = nn.Linear(256, 64)
-      self.output_layer = nn.Linear(64, 9)
+      self.layer1 = nn.Linear(28*28, 2048)
+      self.layer2 = nn.Linear(2048, 512)
+      self.output_layer = nn.Linear(512, 9)
 
     def forward(self, x):
       x = x.view(x.shape[0], 28*28)
@@ -105,7 +105,7 @@ class OurSmallModel(pl.LightningModule):
       prediction = self(x)
 
       loss = F.nll_loss(prediction, y)
-      acc = accuracy(prediction, y, task='multiclass', num_classes=10)
+      acc = accuracy(prediction, y, task='multiclass', num_classes=9)
       self.log('train_loss', loss, prog_bar=True)
       self.log('train_acc', acc, prog_bar=True)
       return loss
@@ -115,7 +115,7 @@ class OurSmallModel(pl.LightningModule):
       prediction = self(x)
 
       loss = F.nll_loss(prediction, y)
-      acc = accuracy(prediction, y, task='multiclass', num_classes=10)
+      acc = accuracy(prediction, y, task='multiclass', num_classes=9)
 
       self.log('val_loss', loss, on_step=False, on_epoch=True, prog_bar=True)
       self.log('val_acc', acc, on_step=False, on_epoch=True, prog_bar=True)
