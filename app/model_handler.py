@@ -10,7 +10,7 @@ sys.modules['__main__'].OurSmallModel = OurSmallModel
 class ModelHandler:
     def __init__(self):
         try:
-            self.model = torch.load("/home/przemek/PycharmProjects/AI_projec/Sudoku-Hacker/notebooks/model.pt",
+            self.model = torch.load("/home/przemekk/PycharmProjects/pl_sudoku/Sudoku-Solver/train_env/first_test.pt",
                                     weights_only=False)
             self.val_tfms = val_tfms
 

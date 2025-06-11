@@ -49,20 +49,13 @@ def process_sudoku_image(image_path, model, tfms):
         else:
             pil_number = Image.fromarray(number)
             number_tensor = tfms(pil_number)
-            images.append(torch.zeros_like(number_tensor[0]))  # czarny kwadrat
+            images.append(torch.zeros_like(number_tensor[0]))
     plot_images(numbers, 9, 9, labels=labels, figsize=(15,18))
     predictions_tensor = torch.tensor(predictions)
+    predictions_list = predictions.tolist()
     print("\nPredykcje jako tensor PyTorch:")
     print(predictions_tensor)
-    # predictions_tensor = torch.tensor(predictions)
-    # print("\nPredykcje jako tensor PyTorch:")
-    # print(predictions_tensor)
-    # plt.figure(figsize=(15, 18))
-    # for i in range(9 * 9):
-    #     plt.subplot(9, 9, i + 1)
-    #     plt.imshow(numbers[i], cmap='gray')
-    #     plt.title(labels[i])
-    #     plt.axis('off')
-    # plt.tight_layout()
-    # plt.show()
-    return predictions
+    print("\nPredykcje jako lista:")
+    print(predictions_list)
+    print(type(predictions))
+    return predictions_list
